@@ -196,16 +196,15 @@ void matrix()
 	do{
 
 		system("clear");
-		printf("|=========== CALCULATOR ==========|\n");
-		printf("|                                 |\n");
-		printf("| 1. Define Matrix A              |\n");
-		printf("| 2. Define Matrix B              |\n");	
-		printf("| 3. Transpose Matrix             |\n");
-		printf("| 4. Multiplication of Matrix     |\n");
-		printf("| 5. Inverse of Matrix            |\n");
-		printf("| 6. Determinant of Matrix        |\n");
-		printf("| 6. Exit                         |\n");
-		printf("|                                 |\n");
+		printf("|====================== CALCULATOR ======================|\n");
+		printf("|                                                        |\n");
+		printf("| 1. Define Matrix A                                     |\n");
+		printf("| 2. Define Matrix B                                     |\n");	
+		printf("| 3. Transpose Matrix (Matrix A)                         |\n");
+		printf("| 4. Multiplication of Matrix (Matrix A * Matrix B)      |\n");
+		printf("| 5. Determinant of Matrix (Matrix A)                    |\n");
+		printf("| 6. Exit                                                |\n");
+		printf("|                                                        |\n");
 	
 	
 
@@ -227,45 +226,46 @@ void matrix()
 		int rB;
 		int cB;
 		
-		double matA[4][4];
-		double matB[4][4];	
+		double matA[3][3];
+		double matB[3][3];	
 
 
 		if(opt6 == 1)
 		{
 			printf("Enter the number of rows for Matrix A : "); 
-					scanf("%d", &rA);
+			scanf("%d", &rA);
 
-					printf("Enter the number of coloums Matrix A : "); 
-					scanf("%d", &cA);
+			printf("Enter the number of coloums Matrix A : "); 
+			scanf("%d", &cA);
 
 
-					for (int xA = 0; xA < rA; xA++)
+				for (int xA = 0; xA < rA; xA++)
+				{
+
+					for (int yA = 0; yA < cA; yA++)
 					{
-
-						for (int yA = 0; yA < cA; yA++)
-						{
-							printf("Enter the element of (%d,%d) :", xA+1, yA+1);
-							scanf("%lf", &matA[xA][yA]);
-						}
+						// printf("Enter the element of (%d,%d) :", xA+1, yA+1);
+						printf("Enter the element of (%d,%d) :", xA, yA);
+						scanf("%lf", &matA[xA][yA]);
 					}
+				}
 
-					printf("Matrix A : \n");
-					for (int xA = 0; xA < rA; xA++)
-					{
-						printf("| ");
+			printf("Matrix A : \n");
+			for (int xA = 0; xA < rA; xA++)
+			{
+				printf("| ");
 
-						for (int yA = 0; yA < cA; yA++)
-						{
-							printf("%0.1lf ", matA[xA][yA]);
-						}
+				for (int yA = 0; yA < cA; yA++)
+				{
+					printf("%0.1lf ", matA[xA][yA]);
+				}
 
-						printf("|\n");
-					}
+				printf("|\n");
+			}
 
-					sleep(1);
-					getchar();
-					getchar();
+			sleep(1);
+			getchar();
+			getchar();
 
 		}
 
@@ -273,45 +273,45 @@ void matrix()
 		{
 
 			printf("Enter the number of rows for Matrix B : "); 
-					scanf("%d", &rB);
+			scanf("%d", &rB);
 
-					printf("Enter the number of coloumns for Matrix B : ");
-					scanf("%d", &cB); 
+			printf("Enter the number of coloumns for Matrix B : ");
+			scanf("%d", &cB); 
 
-					for (int xB = 0; xB < rB; xB++)
+				for (int xB = 0; xB < rB; xB++)
+				{
+
+					for (int yB = 0; yB < cB; yB++)
 					{
-
-						for (int yB = 0; yB < cB; yB++)
-						{
-							printf("Enter the element of (%d,%d) : ", xB+1, yB+1);
-							fflush(stdout);
-							scanf("%lf", &matB[xB][yB]);
-						}
+						printf("Enter the element of (%d,%d) : ", xB+1, yB+1);
+						fflush(stdout);
+						scanf("%lf", &matB[xB][yB]);
 					}
+				}
 
-					printf("Matrix B : \n");
-					for (int xB = 0; xB < rB; xB++)
-					{
-						printf("| ");
+			printf("Matrix B : \n");
+			for (int xB = 0; xB < rB; xB++)
+			{
+				printf("| ");
 
-						for (int yB = 0; yB < cB; yB++)
-						{
-							printf("%0.1lf ", matB[xB][yB]);
-						}
+				for (int yB = 0; yB < cB; yB++)
+				{
+					printf("%0.1lf ", matB[xB][yB]);
+				}
 
-						printf("|\n");
-					}
-					
-					sleep(1);
-					getchar();
-					getchar();
+				printf("|\n");
+			}
+			
+			sleep(1);
+			getchar();
+			getchar();
 					
 		}
 
 
 		if(opt6 == 3)
 		{
-			double temp[4][4] = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
+			double temp[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
 			for (int i = 0; i<rA; i++)
 			{
 				for (int j = 0; j<cA; j++)
@@ -338,6 +338,92 @@ void matrix()
 			getchar();
 			getchar();
 	    }
+
+	    if(opt6 == 4)
+	    {
+	    	if(cA != rB)
+	    	{
+	    		printf("The coloums of Matrix A and rows of Matrix B are not equal!");
+	    		getchar();
+	    		getchar();
+	    		continue;
+	    	}
+	    	else
+	    	{
+		    	double multiplied[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+		    	double sum = 0;
+
+		    	for (int i = 0; i<rA; i++)
+				{
+					for (int j = 0; j<cA; j++)
+					{
+						for (int k = 0; k<rA; k++)
+						{
+							multiplied[i][j] = multiplied[i][j] + (matA[i][k]*matB[k][j]);
+						}
+					}
+
+				}
+
+				printf("\nResultant Matrix  : \n");
+				for (int q = 0; q<rA; q++)
+				{
+					printf("| ");
+
+					for (int p = 0; p<cA; p++)
+					{
+						printf("%lf ", multiplied[q][p]);
+					}
+
+					printf("|\n");
+				}
+
+				sleep(1);
+				getchar();
+				getchar();
+			}
+	    }
+
+	    if(opt6 == 5)
+	    {
+	    	double determinant;
+
+	    	if(rA==cA)
+	    	{
+             	if(rA == 1)
+             	{
+             		determinant = matA[0][0];
+             	}
+
+             	if(rA == 2)
+             	{
+             		determinant = ((matA[0][0]*matA[1][1]) - (matA[0][1]*matA[1][0]));
+             	}
+
+             	if(rA == 3)
+             	{
+             		determinant = matA[0][0] * ((matA[1][1]*matA[2][2])-(matA[1][2]*matA[2][1])) -
+	    				  matA[0][1] * ((matA[1][0]*matA[2][2])-(matA[1][2]*matA[2][0])) +
+	    				  matA[0][2] * ((matA[1][0]*matA[2][1])-(matA[1][1]*matA[2][0]));
+             	}
+
+             	printf("Determinant of Matrix : %lf\n", determinant);
+             	sleep(1);
+				getchar();
+				getchar();
+	    	}
+
+	    	else
+	    	{
+	    		printf("Matrix A is not a square matrix\n");
+	    		sleep(1);
+				getchar();
+				getchar();
+	    	}
+
+	    }
+
+	    
 
 	} while(opt6 != 6);
 
