@@ -10,6 +10,9 @@
 int options(int opt);
 void arithmetic();
 void exponent();
+void factorial();
+void equationsolver();
+void unitconverter();
 void matrix();
 
 int main()
@@ -27,11 +30,15 @@ int main()
 			exponent(); 
 			break;
 
-		case 6 : 
+		case 3 : 
+			factorial();
+			break;
+
+		case 4 : 
 			matrix();
 			break;
 		}
-	} while(opt !=8);
+	} while(opt !=5);
 
 return 0;
 }
@@ -44,15 +51,23 @@ int options(int opt)
 	printf("| 1. Arithmetic                   |\n");
 	printf("| 2. Exponent                     |\n");
 	printf("| 3. Factorial                    |\n");
-	printf("| 4. Trigonometric                |\n");
-	printf("| 5. Unit Converter               |\n");
-	printf("| 6. Matrix                       |\n");
-	printf("| 7. Equations                    |\n");
-	printf("| 8. Exit                         |\n");
+	printf("| 4. Matrix                       |\n");
+	printf("| 5. Exit                         |\n");
 	printf("|                                 |\n");
 
-	printf("Which operation do you want to execute?\nAns : ");
-	scanf("%d", &opt);
+
+	do
+	{
+		printf("Which operation do you want to execute?\nAns : ");
+		scanf("%d", &opt);
+
+		if(opt<1 || opt>5)
+		{
+			printf("INVALID OPTION\n");
+
+		}
+	} while(opt<1 || opt>5);
+
 
 	return opt;
 }
@@ -135,59 +150,92 @@ void exponent()
 {
 	double x, result, base, expo;
 	int opt2;
-
-	system("clear");
-	printf("|=========== CALCULATOR ==========|\n");
-	printf("|                                 |\n");
-	printf("| 1. Power                        |\n");
-	printf("| 2. Exponential                  |\n");
-	printf("| 3. Logarithmic                  |\n");
-	printf("| 4. Exit                         |\n");
-	printf("|                                 |\n");
-
+	
 	do
 	{
-		printf("\nEnter your choice : ");
-		scanf("%d", &opt2);
+		system("clear");
+		printf("|=========== CALCULATOR ==========|\n");
+		printf("|                                 |\n");
+		printf("| 1. Power                        |\n");
+		printf("| 2. Exponential                  |\n");
+		printf("| 3. Logarithmic                  |\n");
+		printf("| 4. Exit                         |\n");
+		printf("|                                 |\n");
 
-		if(opt2<1 || opt2>4)
+		do
 		{
-			printf("INVALID OPTION\n");
+			printf("\nEnter your choice : ");
+			scanf("%d", &opt2);
+
+			if(opt2<1 || opt2>4)
+			{
+				printf("INVALID OPTION\n");
+
+			}
+
+		} while(opt2<1 || opt2>4);
+
+		if(opt2==1)
+		{
+			printf("Enter the base : ");
+			scanf("%lf", &base);
+
+			printf("Enter the exponent : ");
+			scanf("%lf", & expo);
+
+			result = pow(base,expo);
+
+			printf("END RESULT : %lf\n", result);
+
+			getchar();
+			getchar();
+		}
+
+		else if(opt2==2)
+		{
+			printf("Enter the value : ");
+			scanf("%lf", &x);
+
+			result = exp(x);
+
+			printf("END RESULT : %lf\n", result);
+			getchar();
+			getchar();
 
 		}
 
-	} while(opt2<1 || opt2>3);
+		else if(opt2==3)
+		{
+			printf("Enter the value : ");
+			scanf("%lf", &x);
 
-	if(opt2==1)
+			result = log(x);
+
+			printf("END RESULT : %lf\n", result);
+			getchar();
+			getchar();
+
+		}
+
+	}while(opt2!= 4);
+}
+
+void factorial()
+{
+	double f = 1;
+	double n;
+	printf("Enter the number : ");
+	scanf("%lf", &n);
+
+	for (int i = 1; i <= n; i++ )
 	{
-		printf("Enter the base : ");
-		scanf("%lf", &base);
-
-		printf("Enter the exponent : ");
-		scanf("%lf", & expo);
-
-		result = pow(base,expo);
-
-		printf("END RESULT : %lf\n", result);
+		f *= i; 
 	}
-	else if(opt2==2)
-	{
-		printf("Enter the value : ");
-		scanf("%lf", &x);
 
-		result = exp(x);
+	printf("Factorial of %lf is %lf\n", n, f);
 
-		printf("END RESULT : %lf\n", result);
-	}
-	else if(opt2==3)
-	{
-		printf("Enter the value : ");
-		scanf("%lf", &x);
-
-		result = log(x);
-
-		printf("END RESULT : %lf\n", result);
-	}
+	getchar();
+	getchar();	
 }
 
 void matrix()
@@ -232,20 +280,28 @@ void matrix()
 
 		if(opt6 == 1)
 		{
-			printf("Enter the number of rows for Matrix A : "); 
-			scanf("%d", &rA);
+			do
+			{
+				printf("Enter the number of rows for Matrix A (1 - 3) : "); 
+				scanf("%d", &rA);
 
-			printf("Enter the number of coloums Matrix A : "); 
-			scanf("%d", &cA);
+				printf("Enter the number of coloums for Matrix A (1 - 3) : "); 
+				scanf("%d", &cA);
 
+				if(rA<1 || rA>3 || cA<1 || cA>3 )
+				{
+					printf("INVALID OPTION\n");
+
+				}
+
+			} while(rA<1 || rA>3 || cA<1 || cA>3 );
 
 				for (int xA = 0; xA < rA; xA++)
 				{
 
 					for (int yA = 0; yA < cA; yA++)
 					{
-						// printf("Enter the element of (%d,%d) :", xA+1, yA+1);
-						printf("Enter the element of (%d,%d) :", xA, yA);
+						printf("Enter the element of (%d,%d) :", xA+1, yA+1);
 						scanf("%lf", &matA[xA][yA]);
 					}
 				}
@@ -271,6 +327,22 @@ void matrix()
 
 		if(opt6 == 2)
 		{
+
+			do
+			{
+				printf("Enter the number of rows for Matrix B (1 - 3) : "); 
+				scanf("%d", &rB);
+
+				printf("Enter the number of coloumns for Matrix B (1 - 3) : ");
+				scanf("%d", &cB);
+
+				if(rB<1 || rB>3 || cB<1 || cB>3 )
+				{
+					printf("INVALID OPTION\n");
+
+				}
+
+			} while(rB<1 || rB>3 || cB<1 || cB>3 );
 
 			printf("Enter the number of rows for Matrix B : "); 
 			scanf("%d", &rB);
