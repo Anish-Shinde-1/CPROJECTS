@@ -18,7 +18,7 @@ How will this editor work :
 	we currently use :q to quit the addition of new lines to the file and write the content, 
 	but we will use :e to edit, :q to quit, and many more commands to improve the functioning of the text editor
 
-	pre requisites to complete the text editor
+	pre requisites to complete the text editor (learn from portfolio courses youtube channel)
 	pointers - learn pointers in deep so that you understant what it really means to use a pointer variable in a program
 	string.h - learn the important functions in string. h library and how they actually work and how strings function in general
 	file IO - learn file IO functions in depth in order to fully utilize them in your code
