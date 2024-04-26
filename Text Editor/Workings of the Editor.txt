@@ -1,0 +1,28 @@
+How will this editor work : 
+	see first we will run the editor 
+	then it'll prompt us to enter the filename and and the mode of file openening as arguement (for now, later we can add gui to navigate thru the options)
+	after that we will open the file and read all the contents into a buffer string ( use malloc to allocate memory during runtime, learn DMA as prerequisite)
+	now when reading is over will close the file
+	now we will again open it using the mode as arguement given by the user 
+	now we will use the logic in nir_lichtmans video to get to the begining of the line to be edited
+	he takes line number as input but we will do it using up and down arrow keys and then press enter,  need to learn escape sequences for arrow keys and enter key.
+	and then use it again to go to the start of string of words to be edited and press enter to save it in a begin pointer
+	now again using the arrow keys we move to the end of the string of words and press enter to save it in a end pointer
+	this will also delete the words from start pointer to end pointer
+	this will give us three things pointer to the line, pointer to the beginnning to string to be edited and pointer to the end of the string to be edited
+	we will use these three pointers to locate that string to be edited
+	save everything before that string in pre_edit string and save everthing after that string in post_edit string
+	now we will take the user input from user to replace the content in the string to be edited
+	then we will use strcpy function to copy pre_edit to the buffer, then copy edited string to the buffer and then copy post edit to the buffer
+	this will essentially have deleted the string to be edited and replaced it with the new user inputted string without changing anything else in that file.
+	we currently use :q to quit the addition of new lines to the file and write the content, 
+	but we will use :e to edit, :q to quit, and many more commands to improve the functioning of the text editor
+
+	pre requisites to complete the text editor
+	pointers - learn pointers in deep so that you understant what it really means to use a pointer variable in a program
+	string.h - learn the important functions in string. h library and how they actually work and how strings function in general
+	file IO - learn file IO functions in depth in order to fully utilize them in your code
+	dynamic memory allocation - learn dma in depth so that program does not encounter segmentation fault or buffer overflow
+	commandline escape sequences -learn this to understand and recognise what key is being presses in real time
+	ncurses.h / windows.h - learn ncurses or windows library to create a gui wrapper for the text editor
+	(ncurses is for unix based os and windows is ofcourse for windows based os )
