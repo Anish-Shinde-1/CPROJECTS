@@ -6,8 +6,8 @@
 
 int mode_choice(WINDOW *choice_win);
 void file_input(WINDOW *choice_win, char file_name[30]);
-void read_file(FILE *file_ptr);
-
+int count_file_lines(FILE *file_ptr);
+void read_file(FILE *file_ptr, WINDOW *text_pad, int x_max, int y_max, char file_name[30]);
 
 int main()
 {
@@ -21,9 +21,9 @@ int main()
 
 	getmaxyx(stdscr, y_max, x_max);
 
-//------------ CHOOSE THE MODE AND OPEN A FILE -------------------------------------------------------------
+	//------------ CHOOSE THE MODE AND OPEN A FILE -------------------------------------------------------------
 
-	WINDOW *choice_win = newwin(y_max, x_max, 0 , 0);
+	WINDOW *choice_win = newwin(y_max, x_max, 0, 0);
 	box(choice_win, 0, 0);
 	mvwprintw(choice_win, 0, 3, "[ TEXT EDITOR ]");
 	keypad(choice_win, true);
@@ -31,19 +31,20 @@ int main()
 	wrefresh(choice_win);
 
 	int mode = mode_choice(choice_win);
+
 	char *modes[3] = {"r", "r+", "w+"};
+	mvwprintw(choice_win, 10, 3, "%s", modes[mode]);
+	wrefresh(choice_win);
+	getchar();
 	char file_name[30];
 	char ch;
 
-
-	FILE *file_ptr;
-
 	file_input(choice_win, file_name);
-	file_ptr = fopen(file_name, modes[mode]);
+	FILE *file_ptr = fopen(file_name, modes[mode]);
 
 	while (1)
 	{
-		if(file_ptr == NULL)
+		if (file_ptr == NULL)
 		{
 			mvwprintw(choice_win, 4, 3, "ERROR OPENING FILE !");
 			wrefresh(choice_win);
@@ -54,34 +55,40 @@ int main()
 		else
 			break;
 	}
+	fclose(file_ptr);
 
 	delwin(choice_win);
 
-//----------- DISPLAY AND OR EDIT FILE --------------------------------------------------------------------------------------
+	//----------- DISPLAY AND OR EDIT FILE --------------------------------------------------------------------------------------
 
 	box(stdscr, 0, 0);
 	mvprintw(0, 3, "[ %s ]", file_name);
 	refresh();
 
-	switch(mode)
+	int lines = count_file_lines(file_ptr);
+
+	WINDOW *text_pad = newpad(500, x_max - 4);
+	// box(text_pad, 0, 0);
+	prefresh(text_pad, 0, 0, 2, 2, y_max - 3, x_max - 2);
+
+	switch (mode)
 	{
-		case 0 : 
-			read_file();
-			break;
+	case 0:
+		read_file(file_ptr, text_pad, x_max, y_max, file_name);
+		break;
 
-		case 1 : 
-			edit_file();
-			break;
+		// case 1:
+		// 	// edit_file();
+		// 	read_file(file_ptr, text_pad, x_max, y_max);
+		// 	break;
 
-		case 2 : 
-			new_file();
-			break;
+		// case 2 :
+		// 	new_file();
+		// 	break;
 
-		default : 
-			break
+	default:
+		break;
 	}
-
-
 
 	getchar();
 	endwin();
@@ -97,7 +104,6 @@ void file_input(WINDOW *choice_win, char file_name[30])
 	wgetnstr(choice_win, file_name, 29);
 }
 
-
 int mode_choice(WINDOW *choice_win)
 {
 	char modes[3][20] = {"[+] READ A FILE", "[+] EDIT A FILE", "[+] NEW FILE"};
@@ -110,36 +116,36 @@ int mode_choice(WINDOW *choice_win)
 		{
 			if (i == highlight)
 				wattron(choice_win, A_REVERSE);
-			
-			mvwprintw(choice_win, (i*2)+2, 3, "%s",modes[i]);
+
+			mvwprintw(choice_win, (i * 2) + 2, 3, "%s", modes[i]);
 			wattroff(choice_win, A_REVERSE);
 		}
-		
+
 		mode = wgetch(choice_win);
 
-		switch(mode)
+		switch (mode)
 		{
-			case KEY_UP :
-				highlight--;
+		case KEY_UP:
+			highlight--;
 
-				if (highlight < 0) 
-					highlight = 0;
+			if (highlight < 0)
+				highlight = 0;
 
-				break;
-			
-			case KEY_DOWN :
-				highlight++;
+			break;
 
-				if (highlight > 2) 
-					highlight = 2;
+		case KEY_DOWN:
+			highlight++;
 
-				break;
-			
-			default : 
-				break;
+			if (highlight > 2)
+				highlight = 2;
+
+			break;
+
+		default:
+			break;
 		}
 
-		if(mode == 10)
+		if (mode == 10)
 		{
 			break;
 		}
@@ -148,9 +154,44 @@ int mode_choice(WINDOW *choice_win)
 	return highlight;
 }
 
-void read_file(FILE *file_ptr)
+int count_file_lines(FILE *file_ptr)
 {
-	char buffer[256];
+	char ch;
+	int lines = 0;
 
-	while (fgets())
+	while (ch != EOF)
+	{
+		ch = fgetc(file_ptr);
+		if (ch == '\n' || ch == EOF)
+		{
+			lines++;
+		}
+	}
+
+	return lines;
+}
+
+void read_file(FILE *file_ptr, WINDOW *text_pad, int x_max, int y_max, char file_name[30])
+{
+	// NOTE : MAJOR ISSUE WAS THAT I HAD TO OPEN THE FILE IN THIS FUNCTION ONCE AGAIN !!!!!
+	file_ptr = fopen(file_name, "r");
+
+	char buffer[512];
+	prefresh(text_pad, 0, 0, 2, 2, y_max - 3, x_max - 2);
+
+	int line_num = 0;
+	while (fgets(buffer, sizeof(buffer) - 1, file_ptr) != NULL)
+	{
+		int len = strlen(buffer);
+		if (len > 0 && buffer[len - 1] == '\n')
+		{
+			buffer[len - 1] = '\0';
+		}
+
+		mvwprintw(text_pad, line_num, 0, "%3d. %s", line_num + 1, buffer);
+		line_num++;
+	}
+	prefresh(text_pad, 0, 0, 2, 2, y_max - 3, x_max - 2);
+
+	getchar();
 }
